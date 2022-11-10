@@ -1,4 +1,4 @@
 <h2>Game</h2>
 <div id="game">
-  <app-letter-box *ngFor="let letter of this.word?.split('')||[]" [letter] = (letter)> </app-letter-box>
+ <app-word-row *ngFor="let g of guesses" [row]="(g)" [word]=this.word> </app-word-row>
 </div>
