@@ -24,7 +24,7 @@ export class GameComponent implements OnInit {
     }
     //If key is enter and you have typed a guess the same length as the target word, guess
     else if (event.key == 'Enter' && g.length == this.word.length) {
-      this.guess(g.join(''));
+      this.guess(g);
     }
     //If the key is backspace and there are characters to remove, remove one
     else if (g.length > 0 && event.key == 'Backspace') {
@@ -32,17 +32,33 @@ export class GameComponent implements OnInit {
     }
   }
   /*When enter is pressed on a full guess, guess the word*/
-  guess(s: string): void {
-    s = s.toLowerCase();
-    this.guesses.push([]);
-    for (let i = 0; i < s.length; i++) {
-      let c = this.clues.length - 1;
-      if (s[i] == this.word[i]) {
-        this.clues[c][i] = true;
-      } else if (this.word.includes(s[i])) {
-        this.clues[c][i] = false;
+  guess(s: string[]): void {
+    let unused = this.word.split(''); //Full array of characters in the word
+    let c = this.clues.length - 1; //Convenience variable
+    s.forEach((x, index) => {
+      //Toggle each letter to lowercase
+      x = x.toLowerCase();
+      if (this.word[index] == x) {
+        //If this character in the word MATCHES the character in the guess
+        //Then the guess for this character is correct.  Clues should be true.
+        this.clues[this.clues.length - 1][index] = true;
+        //Remove this character from the unused characters array.  Ensure that only 1 clue per character in the word is given.  (IE, if you guess a word with 2 s's and there's only one in the correct word, it'll flag it as false)
+        unused.splice(index, 1);
       }
-    }
+    });
+    s.forEach((item, index) => {
+      //Loop through the characters a 2nd time
+      let f;
+      if (
+        !this.clues[c][index] && //If the character hasn't already been marked as correct
+        (f = unused.findIndex((x) => x == item)) != -1 //Check if it occurs in the remaining unused characters
+      ) {
+        this.clues[c][index] = false; //Mark the clue as false, meaining that the character is in the word but not at the correct position.
+        unused.splice(f, 1); //Remove the character from the unused characters array.  See above explanation.
+      }
+    });
+    //New Line, create new empty guess and completely null clues array;
+    this.guesses.push([]); //Add a new guess
     this.clues.push(LongArray(this.length));
   }
   setLength(x: number) {
