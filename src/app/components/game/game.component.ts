@@ -28,6 +28,7 @@ export class GameComponent implements OnInit {
     }
     //If the key is backspace and there are characters to remove, remove one
     else if (g.length > 0 && event.key == 'Backspace') {
+      g.pop();
     }
   }
   /*When enter is pressed on a full guess, guess the word*/
