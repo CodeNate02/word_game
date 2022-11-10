@@ -1,5 +1,10 @@
 <app-letter-box
-  *ngFor="let letter of this.word.split(''); let i = index;"
-  [letter]=row[i]
+  *ngFor="let clue of clues; let i = index"
+  [letter]="row[i]"
+  [ngClass]="{
+    correct: clue === true,
+    wrongPlace: clue === false,
+    none: clue === null
+  }"
 >
 </app-letter-box>
