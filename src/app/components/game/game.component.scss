@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+h2 {
+  width: fit-content;
+  font-weight: bolder;
+  font-size: x-large;
+  color: white;
+  font-style: italic;
+}
+#game {
+  border: 3px solid white;
+  width: auto;
+  padding: 2em;
+  border-radius: 0 2em 2em 2em;
+  display: flex;
+}

@@ -1,0 +1,15 @@
+:host{
+  display:block;
+  width: fit-content;
+  text-align: center;
+  border: 1px solid black;
+  padding:5px;
+  margin: 10px auto;
+  border-radius:10px;
+}
+label{
+  font-family:'Courier New', Courier, monospace
+}
+input{
+  width:3em;
+}

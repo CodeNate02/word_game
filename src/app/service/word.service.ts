@@ -1,28 +1,27 @@
-import { Component } from '@angular/core';
-import randomWords from 'random-words';
+import { Injectable } from '@angular/core';
+import {Observable, of} from 'rxjs'
+import randomWords from 'random-words'
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+@Injectable({
+  providedIn: 'root',
 })
-export class AppComponent {
-  title:string = 'word_game';
-  length:number = 5;
+export class WordService {
+  length = 5;
   word: string;
   constructor() {
     this.word = getWord(this.length);
   }
+  getWord() {
+    return of(this.word);
+  }
   setLength(x: number) {
     this.length = x;
-    this.generateNewWord();
+    return this.length;
   }
-  generateNewWord(): void {
+  newWord() {
     this.word = getWord(this.length);
+    return this.word;
   }
-  // log(x:any):void {
-  //   console.log(x);
-  // }
 }
 
 /**Get Word

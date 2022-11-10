@@ -1,0 +1,19 @@
+:host{
+  background-color: #A04045;
+  flex-grow:3;
+}
+header{
+  width:100%;
+  padding: 10px;
+  background-color:#800000;
+  box-shadow:  0 2px 10px rgb(0 0 0 / 0.4);
+  h1{
+    color:white;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-size: xx-large;
+  }
+}
+#game{
+  width:fit-content;
+  margin:auto;
+}
