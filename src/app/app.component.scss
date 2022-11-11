@@ -1,6 +1,8 @@
 :host{
   background-color: #FFFFF3;
   flex-grow:3;
+  display:flex;
+  flex-direction: column;
 }
 header{
   width:100%;

@@ -1,22 +1,33 @@
 ul {
   display: grid;
-  grid-template-columns: repeat(20, 1.5em);
-  grid-template-rows: repeat(4, 3em);
+  grid-template-columns: repeat(20, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   gap: 2px;
-  padding:1em 3em;
+  padding:20px;
+  box-sizing: border-box;
   border:3px solid black;
-  border-radius: 3em;
-  position: absolute;
-  bottom:5px;
-  left:50%;
-  transform:translate(-50%)
+  border-radius: 40px;
+  font-size:xx-large;
+  width:100%;
+  max-width:15em;
+  margin:15px auto;
 }
 li {
+  display:block;
+  width:100%;
+  height:fit-content;
   grid-column-end: span 2;
   border: 1px solid black;
   font-family: "Times New Roman", Times, serif;
   &:hover {
     border-color: #888888;
+  }
+  span{
+    position: absolute;
+  }
+  .after {
+    padding-bottom:100%;
+    width:100%
   }
 }
 .bigButton {
