@@ -71,7 +71,7 @@ export class GameComponent implements OnInit {
     }); //Check for incorrect placement
     if (this.clues[this.clues.length - 1].filter((x) => !x).length < 1) {
       this.gameState = 2;
-    } else if (this.guesses.length == 5) {
+    } else if (this.guesses.length == gameLength(this.word.length)) {
       this.gameState = 1;
     } else {
       //New Line, create new empty guess and completely null clues array;
@@ -185,3 +185,10 @@ export const KEYBOARD_EMPTY: () => Keyboard = () => ({
   n: 0,
   m: 0,
 });
+
+const gameLength: (x: number) => number = (x) => {
+  if(x>5){
+    return(x)
+  }
+  return(5);
+};
