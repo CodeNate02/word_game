@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+// import { HttpClient, HttpHeaders } from '@angular/common/http';
+// import { Observable, of } from 'rxjs';
 import EOWL from '../../assets/eowl'
-import randomWords from 'random-words';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +9,7 @@ import randomWords from 'random-words';
 export class WordService {
   wordList:string[] = [];
   length:number = 5;
-  constructor(private http: HttpClient) {
+  constructor(/* private http: HttpClient */) {
   }
   getWord(length=this.length):string {
     if(length) this.setLength(length);
@@ -24,11 +23,14 @@ export class WordService {
   setLength(x: number) {
     if(1 < x && x <= 10){
       this.length = x;
-      this.wordList = EOWL.filter(w=>w.length==x);
+      this.wordList = EOWL.filter(w=>w.length==x); //wordList contains all words of the specified length.  Only generated when width is changed.
 
     }
     else alert('Werdul only supports words of length between 2 and 10 characters long')
     return this.length;
+  }
+  validate(word:string){
+    return this.wordList.includes(word);
   }
   getLength(){
     return this.length;
