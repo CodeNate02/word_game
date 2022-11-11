@@ -1,5 +1,12 @@
-<app-word-length df={{this.length}} (onNewWord)="setLength($event)"> </app-word-length>
+<app-word-length df="{{ this.length }}" (onNewWord)="setLength($event)">
+</app-word-length>
 <h2>Game</h2>
 <div id="game">
- <app-word-row *ngFor="let g of guesses; let i=index" [row]="(g)" [clues]=this.clues[i]> </app-word-row>
+  <app-word-row
+    *ngFor="let g of guesses; let i = index"
+    [row]="g"
+    [clues]="this.clues[i]"
+  >
+  </app-word-row>
 </div>
+<app-keyboard [keyboard]="this.keys" (keyclick)="type($event)"> </app-keyboard>

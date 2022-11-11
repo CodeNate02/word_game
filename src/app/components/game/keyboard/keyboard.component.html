@@ -1,0 +1,18 @@
+<ul id="keyboard">
+  <li class='bigButton' (click)="keyboardClick('Enter')"> Enter </li>
+  <li class='bigButton' (click)="keyboardClick('Backspace')"> <-- </li>
+  <li
+    *ngFor="let letter of keys"
+    [ngClass]="{
+      is_correct: keyboard[letter] == 3,
+      is_wrong: keyboard[letter] == 2,
+      is_tried: keyboard[letter] == 1,
+      is_unused: keyboard[letter] == 0,
+      line2: letter == 'a',
+      line3: letter == 'z'
+    }"
+    (click)='keyboardClick(letter)'
+  >
+    {{ letter }}
+  </li>
+</ul>

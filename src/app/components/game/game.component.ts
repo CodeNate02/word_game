@@ -9,25 +9,29 @@ import randomWords from 'random-words';
 export class GameComponent implements OnInit {
   guesses: GuessArray = [[]];
   length: number = 5;
+  keys: Keyboard = KEYBOARD_EMPTY();
+  //keyboard =
   clues: ClueArray = [LongArray(this.length)];
   word: string = getWord(this.length);
+
+  keyPress(e: KeyboardEvent): void {
+    this.type(e.key);
+  }
   /*Type event catches and processes keypresses*/
-  type(event: KeyboardEvent): void {
+  type(s: string): void {
     let g: string[] = this.guesses[this.guesses.length - 1];
-    //If there are still characters to type, the keypress is a key of length 1, and the key is a letter, type it
     if (
-      event.key.length == 1 &&
-      g.length < this.word.length &&
-      event.key.match('[a-zA-Z]')
+      g.length < this.word.length && //If the keycode is a key,
+      s.match('^[a-zA-Z]$') //Regex check if the keycode is a single letter
     ) {
-      g.push(event.key.toUpperCase());
+      g.push(s.toLowerCase()); //Push the key to the guess
     }
     //If key is enter and you have typed a guess the same length as the target word, guess
-    else if (event.key == 'Enter' && g.length == this.word.length) {
-      this.guess(g);
+    else if (s == 'Enter' && g.length == this.word.length) {
+      this.guess(g); //Run the guess code on the word
     }
     //If the key is backspace and there are characters to remove, remove one
-    else if (g.length > 0 && event.key == 'Backspace') {
+    else if (g.length > 0 && s == 'Backspace') {
       g.pop();
     }
   }
@@ -37,11 +41,11 @@ export class GameComponent implements OnInit {
     let c = this.clues.length - 1; //Convenience variable
     s.forEach((x, index) => {
       //Toggle each letter to lowercase
-      x = x.toLowerCase();
       if (this.word[index] == x) {
         //If this character in the word MATCHES the character in the guess
         //Then the guess for this character is correct.  Clues should be true.
         this.clues[this.clues.length - 1][index] = true;
+        this.keys[x] = 3;
         //Remove this character from the unused characters array.  Ensure that only 1 clue per character in the word is given.  (IE, if you guess a word with 2 s's and there's only one in the correct word, it'll flag it as false)
         unused.splice(index, 1);
       }
@@ -53,14 +57,19 @@ export class GameComponent implements OnInit {
         !this.clues[c][index] && //If the character hasn't already been marked as correct
         (f = unused.findIndex((x) => x == item)) != -1 //Check if it occurs in the remaining unused characters
       ) {
+        if (this.keys[item] < 2) this.keys[item] = 2;
         this.clues[c][index] = false; //Mark the clue as false, meaining that the character is in the word but not at the correct position.
         unused.splice(f, 1); //Remove the character from the unused characters array.  See above explanation.
+      } else {
+        if (this.keys[item] < 1) this.keys[item] = 1;
       }
     });
     //New Line, create new empty guess and completely null clues array;
     this.guesses.push([]); //Add a new guess
     this.clues.push(LongArray(this.length));
   }
+
+  /*Word selection/generation functions*/
   setLength(x: number) {
     this.length = x;
     this.generateNewWord();
@@ -69,9 +78,11 @@ export class GameComponent implements OnInit {
     this.guesses = [[]];
     this.word = getWord(this.length);
     this.clues = [LongArray(this.length)];
+    this.keys = KEYBOARD_EMPTY();
   }
+
   constructor() {
-    window.onkeydown = (e) => this.type(e);
+    window.onkeydown = (e) => this.keyPress(e);
     this.word = getWord(this.length);
   }
   ngOnInit(): void {}
@@ -104,3 +115,61 @@ const LongArray: (n: number, p?: any) => any[] = (n, p = null) => {
   }
   return r;
 };
+
+export type Keyboard = {
+  q: 0 | 1 | 2 | 3;
+  w: 0 | 1 | 2 | 3;
+  e: 0 | 1 | 2 | 3;
+  r: 0 | 1 | 2 | 3;
+  t: 0 | 1 | 2 | 3;
+  y: 0 | 1 | 2 | 3;
+  u: 0 | 1 | 2 | 3;
+  i: 0 | 1 | 2 | 3;
+  o: 0 | 1 | 2 | 3;
+  p: 0 | 1 | 2 | 3;
+  a: 0 | 1 | 2 | 3;
+  s: 0 | 1 | 2 | 3;
+  d: 0 | 1 | 2 | 3;
+  f: 0 | 1 | 2 | 3;
+  g: 0 | 1 | 2 | 3;
+  h: 0 | 1 | 2 | 3;
+  j: 0 | 1 | 2 | 3;
+  k: 0 | 1 | 2 | 3;
+  l: 0 | 1 | 2 | 3;
+  z: 0 | 1 | 2 | 3;
+  x: 0 | 1 | 2 | 3;
+  c: 0 | 1 | 2 | 3;
+  v: 0 | 1 | 2 | 3;
+  b: 0 | 1 | 2 | 3;
+  n: 0 | 1 | 2 | 3;
+  m: 0 | 1 | 2 | 3;
+  [keychar: string]: 0 | 1 | 2 | 3;
+};
+export const KEYBOARD_EMPTY: () => Keyboard = () => ({
+  q: 0,
+  w: 0,
+  e: 0,
+  r: 0,
+  t: 0,
+  y: 0,
+  u: 0,
+  i: 0,
+  o: 0,
+  p: 0,
+  a: 0,
+  s: 0,
+  d: 0,
+  f: 0,
+  g: 0,
+  h: 0,
+  j: 0,
+  k: 0,
+  l: 0,
+  z: 0,
+  x: 0,
+  c: 0,
+  v: 0,
+  b: 0,
+  n: 0,
+  m: 0,
+});
