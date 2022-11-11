@@ -8,5 +8,14 @@
     [clues]="this.clues[i]"
   >
   </app-word-row>
+  <p *ngIf="this.gameState == 1">
+    Your word was
+    <span>
+      {{ this.word }}
+    </span>
+  </p>
+  <p *ngIf="this.gameState == 2">
+    You won in {{ this.guesses.length }} guesses!!
+  </p>
 </div>
 <app-keyboard [keyboard]="this.keys" (keyclick)="type($event)"> </app-keyboard>

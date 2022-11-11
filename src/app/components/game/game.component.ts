@@ -7,6 +7,7 @@ import randomWords from 'random-words';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
+  gameState: number = 0;
   guesses: GuessArray = [[]];
   length: number = 5;
   keys: Keyboard = KEYBOARD_EMPTY();
@@ -19,6 +20,7 @@ export class GameComponent implements OnInit {
   }
   /*Type event catches and processes keypresses*/
   type(s: string): void {
+    if (this.gameState != 0) return;
     let g: string[] = this.guesses[this.guesses.length - 1];
     if (
       g.length < this.word.length && //If the keycode is a key,
@@ -47,15 +49,18 @@ export class GameComponent implements OnInit {
         this.clues[this.clues.length - 1][index] = true;
         this.keys[x] = 3;
         //Remove this character from the unused characters array.  Ensure that only 1 clue per character in the word is given.  (IE, if you guess a word with 2 s's and there's only one in the correct word, it'll flag it as false)
-        unused.splice(index, 1);
+        unused.splice(
+          unused.findIndex((item) => item == x),
+          1
+        );
       }
-    });
+    }); //Check for correct placement
     s.forEach((item, index) => {
       //Loop through the characters a 2nd time
-      let f;
+      let f = unused.findIndex((x) => x == item);
       if (
         !this.clues[c][index] && //If the character hasn't already been marked as correct
-        (f = unused.findIndex((x) => x == item)) != -1 //Check if it occurs in the remaining unused characters
+        f != -1 //Check if it occurs in the remaining unused characters
       ) {
         if (this.keys[item] < 2) this.keys[item] = 2;
         this.clues[c][index] = false; //Mark the clue as false, meaining that the character is in the word but not at the correct position.
@@ -63,10 +68,16 @@ export class GameComponent implements OnInit {
       } else {
         if (this.keys[item] < 1) this.keys[item] = 1;
       }
-    });
-    //New Line, create new empty guess and completely null clues array;
-    this.guesses.push([]); //Add a new guess
-    this.clues.push(LongArray(this.length));
+    }); //Check for incorrect placement
+    if (this.clues[this.clues.length - 1].filter((x) => !x).length < 1) {
+      this.gameState = 2;
+    } else if (this.guesses.length == 5) {
+      this.gameState = 1;
+    } else {
+      //New Line, create new empty guess and completely null clues array;
+      this.guesses.push([]); //Add a new guess
+      this.clues.push(LongArray(this.length));
+    }
   }
 
   /*Word selection/generation functions*/
@@ -78,6 +89,7 @@ export class GameComponent implements OnInit {
     this.guesses = [[]];
     this.word = getWord(this.length);
     this.clues = [LongArray(this.length)];
+    this.gameState = 0;
     this.keys = KEYBOARD_EMPTY();
   }
 

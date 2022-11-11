@@ -5,8 +5,7 @@ ul {
   gap: 2px;
   padding:20px;
   box-sizing: border-box;
-  border:3px solid black;
-  border-radius: 40px;
+  border:0 3px solid black;
   font-size:xx-large;
   width:100%;
   max-width:15em;
@@ -19,6 +18,7 @@ li {
   grid-column-end: span 2;
   border: 1px solid black;
   font-family: "Times New Roman", Times, serif;
+  position:relative;
   &:hover {
     border-color: #888888;
   }
