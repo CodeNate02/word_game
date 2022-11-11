@@ -1,5 +1,5 @@
 <app-letter-box
-  *ngFor="let clue of clues; let i = index"
+  *ngFor="let clue of clues; let i = index; let l = last"
   [letter]="row[i]"
   [ngClass]="{
     correct: clue === true,

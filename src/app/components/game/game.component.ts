@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WordService } from '../../service/word.service';
 import randomWords from 'random-words';
 
 @Component({
@@ -7,14 +8,14 @@ import randomWords from 'random-words';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  gameState: number = 0;
-  guesses: GuessArray = [[]];
-  length: number = 5;
+  default: number = 5;
+  gameState: number = -1;
+  guesses: GuessArray = [];
   keys: Keyboard = KEYBOARD_EMPTY();
   //keyboard =
-  clues: ClueArray = [LongArray(this.length)];
-  word: string = getWord(this.length);
 
+  word: string = '';
+  clues: ClueArray = [];
   keyPress(e: KeyboardEvent): void {
     this.type(e.key);
   }
@@ -76,45 +77,40 @@ export class GameComponent implements OnInit {
     } else {
       //New Line, create new empty guess and completely null clues array;
       this.guesses.push([]); //Add a new guess
-      this.clues.push(LongArray(this.length));
+      this.clues.push(LongArray(this.word.length));
     }
   }
-
-  /*Word selection/generation functions*/
-  setLength(x: number) {
-    this.length = x;
-    this.generateNewWord();
-  }
-  generateNewWord(): void {
-    this.guesses = [[]];
-    this.word = getWord(this.length);
-    this.clues = [LongArray(this.length)];
-    this.gameState = 0;
+  newGame(x?: number): void {
+    this.gameState = -1;
+    this.word = this.wordService.getWord(x);
+    this.clues = [LongArray(this.wordService.getLength())];
     this.keys = KEYBOARD_EMPTY();
+    this.guesses = [[]];
+    this.gameState = 0;
   }
 
-  constructor() {
+  constructor(private wordService: WordService) {
     window.onkeydown = (e) => this.keyPress(e);
-    this.word = getWord(this.length);
+    this.newGame(this.default);
   }
   ngOnInit(): void {}
 }
 
 type GuessArray = string[][];
 type ClueArray = (true | false | null)[][];
-/**Get Word
- * Since the script doesn't have a 'min-length', repeatedly try to get a word
- * until you get one within the trarget range.
- * Works reliably for words of length between 2 and 14 (inclusively).
- */
-const getWord: (min_length: number, max_length?: number) => string = (
-  min_length,
-  max_length = min_length
-) => {
-  let word: string = randomWords({ exactly: 1, maxLength: max_length })[0];
-  if (word.length >= min_length) return word;
-  else return getWord(min_length, max_length);
-};
+// /**Get Word
+//  * Since the script doesn't have a 'min-length', repeatedly try to get a word
+//  * until you get one within the trarget range.
+//  * Works reliably for words of length between 2 and 14 (inclusively).
+//  */
+// const getWord: (min_length: number, max_length?: number) => string = (
+//   min_length,
+//   max_length = min_length
+// ) => {
+//   let word: string = randomWords({ exactly: 1, maxLength: max_length })[0];
+//   if (word.length >= min_length) return word;
+//   else return getWord(min_length, max_length);
+// };
 /**LongArray
  * Instantly generates array of length n with value p
  * n: Array Length
@@ -187,8 +183,8 @@ export const KEYBOARD_EMPTY: () => Keyboard = () => ({
 });
 
 const gameLength: (x: number) => number = (x) => {
-  if(x>5){
-    return(x)
+  if (x > 5) {
+    return x;
   }
-  return(5);
+  return 5;
 };

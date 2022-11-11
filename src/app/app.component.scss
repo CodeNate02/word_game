@@ -19,3 +19,22 @@ header{
   width:fit-content;
   margin:auto;
 }
+
+.notice{
+  position:absolute;
+  bottom:0; left:0;
+  font-size: small;
+  width:35em;
+  border:1px solid black;
+  h4{
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+}
+@media screen and (max-width:1250px) {
+  .notice{
+    position:static;
+    width:100%;
+  }
+}
