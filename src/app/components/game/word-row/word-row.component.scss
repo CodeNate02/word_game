@@ -2,3 +2,31 @@
   display:flex;
   padding:5px;
 }
+:host.invalid{
+  *{border-color:red}
+  position:relative;
+  &.shake1{
+    right: 3px;
+  }
+  &.shake2{
+    left: 3px;
+  }
+  
+}
+span {
+  font-size: 3em;
+  font-family: "Times New Roman", Times, serif;
+  display: block;
+  margin: 0 2px;
+  border: 2px solid black;
+  height: 1em;
+  width: 1em;
+  text-align: center;
+  font-variant-caps: all-petite-caps;
+}
+span.correct {
+  background: green;
+}
+span.wrongPlace {
+  background: yellow;
+}

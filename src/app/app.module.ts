@@ -4,13 +4,12 @@ import {HttpClientModule} from '@angular/common/http'
 import { AppComponent } from './app.component';
 import { GameComponent } from './components/game/game.component';
 import { WordLengthComponent } from './components/word-length/word-length.component';
-import { LetterBoxComponent } from './components/game/letter-box/letter-box.component';
 import { WordRowComponent } from './components/game/word-row/word-row.component';
 import { KeyboardComponent } from './components/game/keyboard/keyboard.component';
 
 
 @NgModule({
-  declarations: [AppComponent, GameComponent, WordLengthComponent, LetterBoxComponent, WordRowComponent, KeyboardComponent],
+  declarations: [AppComponent, GameComponent, WordLengthComponent, WordRowComponent, KeyboardComponent],
   imports: [BrowserModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],

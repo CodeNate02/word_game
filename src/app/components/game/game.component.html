@@ -3,7 +3,12 @@
 <h2>Game <span *ngIf='this.gameState == -1'> Loading... </span></h2>
 <div id="game" *ngIf="this.gameState>=0">
   <app-word-row
-    *ngFor="let g of guesses; let i = index"
+    *ngFor="let g of guesses; let i = index; let l=last"
+    [ngClass]="{
+      invalid: l && this.invalid > 0,
+      shake1: l && this.invalid == 1,
+      shake2: l && this.invalid == 2
+    }"
     [row]="g"
     [clues]="this.clues[i]"
   >

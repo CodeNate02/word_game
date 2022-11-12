@@ -12,34 +12,65 @@ export class GameComponent implements OnInit {
   gameState: number = -1;
   guesses: GuessArray = [];
   keys: Keyboard = KEYBOARD_EMPTY();
-  //keyboard =
-
   word: string = '';
   clues: ClueArray = [];
+  invalid = 0;
+  invalidAlert():void{
+    this.invalid = 1;
+    setTimeout(()=>{
+      this.invalid=2
+      setTimeout(()=>this.invalid=0,175);
+    },75);
+  }
+
+   /*keyPress event catches and processes keypresses*/
   keyPress(e: KeyboardEvent): void {
     this.type(e.key);
   }
-  /*Type event catches and processes keypresses*/
+  
+  /* Type event run by either keypress or click on on-screen keyboard
+  -If game is over, runs newGame.
+  -If game is running, checks button type:
+  --Letters will be added to guess if there is room
+  --Enter will submit a full guess
+  --Backspace will delete a character from the guess
+  */
   type(s: string): void {
-    if (this.gameState != 0) return;
-    let g: string[] = this.guesses[this.guesses.length - 1];
-    if (
-      g.length < this.word.length && //If the keycode is a key,
-      s.match('^[a-zA-Z]$') //Regex check if the keycode is a single letter
-    ) {
-      g.push(s.toLowerCase()); //Push the key to the guess
+    switch(this.gameState){
+      case -1: return;
+      case 0:
+        let g: string[] = this.guesses[this.guesses.length - 1];
+        if (
+          g.length < this.word.length && //If the keycode is a key,
+          s.match('^[a-zA-Z]$') //Regex check if the keycode is a single letter
+        ) {
+          g.push(s.toLowerCase()); //Push the key to the guess
+        }
+        //If key is enter and you have typed a guess the same length as the target word, guess
+        else if (s == 'Enter' && g.length == this.word.length) {
+          this.guess(g); //Run the guess code on the word
+        }
+        //If the key is backspace and there are characters to remove, remove one
+        else if (g.length > 0 && s == 'Backspace') {
+          g.pop();
+        }
+        break;
+      case 1:
+      case 2:
+        this.newGame();
+        break;
     }
-    //If key is enter and you have typed a guess the same length as the target word, guess
-    else if (s == 'Enter' && g.length == this.word.length) {
-      this.guess(g); //Run the guess code on the word
-    }
-    //If the key is backspace and there are characters to remove, remove one
-    else if (g.length > 0 && s == 'Backspace') {
-      g.pop();
-    }
+    
   }
-  /*When enter is pressed on a full guess, guess the word*/
+  /*Guess Script runs when an answer is submitted,
+  If word is valid english, checks it for accuracy and updates information as necessary
+  Otherwise runs invalid function.
+  */
   guess(s: string[]): void {
+    if(!this.wordService.validate(s.join(''))){
+      this.invalidAlert();
+      return;
+    }
     let unused = this.word.split(''); //Full array of characters in the word
     let c = this.clues.length - 1; //Convenience variable
     s.forEach((x, index) => {
@@ -80,6 +111,11 @@ export class GameComponent implements OnInit {
       this.clues.push(LongArray(this.word.length));
     }
   }
+  /*New Game Script
+  runs to reset variables,
+  retrieves a new word from the wordService
+  If a number is provided, sets the word length to that number
+  */
   newGame(x?: number): void {
     this.gameState = -1;
     this.word = this.wordService.getWord(x);

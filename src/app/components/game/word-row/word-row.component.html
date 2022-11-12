@@ -1,10 +1,10 @@
-<app-letter-box
-  *ngFor="let clue of clues; let i = index; let l = last"
-  [letter]="row[i]"
+<span
+  *ngFor="let clue of clues; let i = index;"
   [ngClass]="{
     correct: clue === true,
     wrongPlace: clue === false,
     none: clue === null
   }"
 >
-</app-letter-box>
+{{row[i]}}
+</span>
